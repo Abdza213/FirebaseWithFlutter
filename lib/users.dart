@@ -17,51 +17,19 @@ class User {
 
 class apiUser with ChangeNotifier {
   List<User> addNewUser = [];
+  Object? authToken;
+  apiUser({this.authToken, required this.addNewUser});
 
   ///api تعريف ليست  ل اضافة المعلومات اليها من ال
 
   ///
   ////
   /////
-  Future<void> addItem({
-    /// دالة ااضافة العناصر المطلوبة
-    required String id,
-    required String fullName,
-    required String password,
-  }) async {
-    const String uri =
-        'https://flutterapp-3a779-default-rtdb.firebaseio.com/users.json';
-
-    //post : لرفع البيانات الى الفايربيز
-    //// عنصرين post يستقبل ال
-    /// URI, body=> json.encode
-    http.Response res = await http.post(Uri.parse(uri),
-        body: json.encode({
-          'fullName': fullName,
-          'password': password,
-        }));
-
-    //// بعدها يتم الاضافة الى اليست
-    addNewUser.add(User(
-      id: json
-          .decode(res.body)['name'], ////من الفايربيس مباشرة id نحرص ان يكون ال
-      fullName: fullName,
-      password: password,
-    ));
-    print('Added');
-    notifyListeners();
-
-    /// اهم كلمة ب الكود
-  }
-
-  ///
-  ////
-  ////
   Future<void> fetchData() async {
     /// api التحقق من اضافة المعلومات وجلب المعلومات من ال
 
-    const String uri =
-        'https://flutterapp-3a779-default-rtdb.firebaseio.com/users.json';
+    final String uri =
+        'https://flutterapp-3a779-default-rtdb.firebaseio.com/users.json?auth=$authToken';
 
     /// http.get => api لجلب البيانات من ال فايربيز من ال
     http.Response res = await http.get(Uri.parse(uri));
@@ -90,6 +58,7 @@ class apiUser with ChangeNotifier {
               password: value['password'],
             ),
           );
+          notifyListeners(); //// لا تنسى هل كلمة ياا عموو
         }
       },
     );
@@ -97,6 +66,46 @@ class apiUser with ChangeNotifier {
 
     notifyListeners(); //// لا تنسى هل كلمة ياا عموو
   }
+
+  ///
+  /////
+  ////
+  /////
+  //
+  Future<void> addItem({
+    /// دالة ااضافة العناصر المطلوبة
+    required String id,
+    required String fullName,
+    required String password,
+  }) async {
+    String uri =
+        'https://flutterapp-3a779-default-rtdb.firebaseio.com/users.json';
+
+    //post : لرفع البيانات الى الفايربيز
+    //// عنصرين post يستقبل ال
+    /// URI, body=> json.encode
+    http.Response res = await http.post(Uri.parse(uri),
+        body: json.encode({
+          'fullName': fullName,
+          'password': password,
+        }));
+
+    //// بعدها يتم الاضافة الى اليست
+    addNewUser.add(User(
+      id: json
+          .decode(res.body)['name'], ////من الفايربيس مباشرة id نحرص ان يكون ال
+      fullName: fullName,
+      password: password,
+    ));
+    print('Added');
+    notifyListeners();
+
+    /// اهم كلمة ب الكود
+  }
+
+  ///
+  ////
+  ////
 
   ///
   //////

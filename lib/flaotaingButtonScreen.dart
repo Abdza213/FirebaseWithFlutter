@@ -10,7 +10,7 @@ class floatingButton extends StatefulWidget {
 class _floatingButtonState extends State<floatingButton> {
   String fullName = '';
   String password = '';
-  apiUser s1 = new apiUser();
+  apiUser s1 = new apiUser(addNewUser: []);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
